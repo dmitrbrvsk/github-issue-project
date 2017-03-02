@@ -1,11 +1,55 @@
-import React from 'react';
+import React, { Component } from 'react';
+import RaisedButton from 'material-ui/RaisedButton';
+import Paper from 'material-ui/Paper';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
+import TextField from 'material-ui/TextField';
 
-const Header = () => (
-    <MuiThemeProvider>
-        <AppBar title="React Github Issues" showMenuIconButton={false} />
-    </MuiThemeProvider>
-)
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
+import * as headerActions from '../actions/issues'
 
-export default Header;
+export class Header extends Component {
+    constructor(props) {
+        super(props)
+        this.handleChange = this.handleChange.bind(this)
+    }
+
+    handleChange(e) {
+        e.preventDefault()
+        console.log(e.target.value);
+        // this.search(e.target.value);
+        this.props.actions.search(e.target.value);
+    }
+    render() {
+        return (
+            <MuiThemeProvider>
+                <Paper>
+                    <form>
+                        <div>
+                            <TextField hintText='Введите имя пользователя' onChange={this.handleChange} />
+                        </div>
+                         <div>
+                            <TextField hintText='Введите название репозитория' />
+                        </div>
+                        <RaisedButton label='Поиск' primary={true} />
+                    </form>
+                </Paper>   
+            </MuiThemeProvider>
+        )
+    }
+}
+
+let mapStateToProps = (state) => {
+  return {
+    header: state.header
+  }
+}
+
+let mapDispatchToProps = (dispatch) => {
+  return {
+    actions: bindActionCreators(headerActions, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header)
