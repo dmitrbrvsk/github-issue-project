@@ -1,4 +1,4 @@
-import { SEARCH_REQUEST, SEARCH_SUCCESS } from '../constants/constants';
+import { SEARCH_ISSUES_REQUEST, SEARCH_ISSUES_SUCCESS, SEARCH_ISSUES_FAILED } from '../constants/constants';
 
 const initialState = {
   loading: false,
@@ -16,15 +16,21 @@ export default function issueList(state = initialState, action) {
         action.payload
       ];
 
-      case SEARCH_REQUEST:
+      case SEARCH_ISSUES_REQUEST:
         return {
           loading: true
         }
 
-      case SEARCH_SUCCESS:
+      case SEARCH_ISSUES_SUCCESS:
         return {
           loading: false,
           search_results: action.payload.results
+        }
+
+      case SEARCH_ISSUES_FAILED:
+        return {
+          loading: false,
+          search_results: []
         }
 
       default:

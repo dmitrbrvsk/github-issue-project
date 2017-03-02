@@ -59,7 +59,8 @@
     "redux": "^3.6.0",
     "redux-devtools-extension": "^2.13.0",
     "redux-logger": "^2.8.1",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "throttle-debounce": "^1.0.1"
   },
   "scripts": {
     "start": "node scripts/start.js",

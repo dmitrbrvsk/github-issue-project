@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
+import { debounce } from 'throttle-debounce';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import TextField from 'material-ui/TextField';
 
-import {bindActionCreators} from 'redux'
-import {connect} from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import * as headerActions from '../actions/issues'
 
 export class Header extends Component {
@@ -15,11 +16,14 @@ export class Header extends Component {
         this.handleChange = this.handleChange.bind(this)
     }
 
+
+    search = debounce(600, (q) => {
+        this.props.actions.search({q: q});
+    })
+
     handleChange(e) {
         e.preventDefault()
-        console.log(e.target.value);
-        // this.search(e.target.value);
-        this.props.actions.search(e.target.value);
+        this.search(e.target.value)
     }
     render() {
         return (
