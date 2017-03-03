@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Link } from 'react-router'
 
 const style = {
@@ -8,7 +8,7 @@ const style = {
 const NotFound = () => (
       <div style={style}>
         <h1>Страница не найдена. Вернуться на <Link to='/'>главную</Link>?</h1>
-        <img src='/images/404.jpg'/>
+        <img src='/images/404.jpg' role="presentation" />
       </div>
 );
 

@@ -8,7 +8,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 import configureStore from './store/configureStore';
-import {routes} from './routes.jsx'
+import { routes } from './routes.jsx'
 
 const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store);

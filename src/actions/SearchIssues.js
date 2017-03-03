@@ -2,8 +2,7 @@ import { SEARCH_ISSUES_REQUEST, SEARCH_ISSUES_SUCCESS, SEARCH_ISSUES_FAILED, URL
 
 export let search = (payload) => {
   return (dispatch) => {
-    const searchString = payload.q
-    console.log('searchString',searchString)
+    const searchObject = payload.q;
 
     dispatch({
       type: SEARCH_ISSUES_REQUEST
@@ -18,7 +17,7 @@ export let search = (payload) => {
       })
     }
 
-    fetch(URL_API + '/search/repositories?q=' + searchString +  '+user:reactjs')
+    fetch(URL_API + '/repos/' + searchObject.user + '/' + searchObject.repo +'/issues')
         .then(function(response) {
             return response.json()
         }).then(function(json) {

@@ -2,11 +2,10 @@ import { SEARCH_ISSUES_REQUEST, SEARCH_ISSUES_SUCCESS, SEARCH_ISSUES_FAILED } fr
 
 const initialState = {
   loading: false,
-  search_results: [],
-  items: ['issue 1','issue 2','issue 3']
+  search_results: []
 };
 
-export default function issueList(state = initialState, action) {
+export default function SearchIssuesReducer (state = initialState, action) {
 
   switch (action.type) {
     
