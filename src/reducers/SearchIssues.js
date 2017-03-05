@@ -8,12 +8,6 @@ const initialState = {
 export default function SearchIssuesReducer (state = initialState, action) {
 
   switch (action.type) {
-    
-    case 'ADD_ISSUE':
-      return [
-        ...state,
-        action.payload
-      ];
 
       case SEARCH_ISSUES_REQUEST:
         return {

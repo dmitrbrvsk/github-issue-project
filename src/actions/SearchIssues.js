@@ -21,7 +21,6 @@ export let search = (payload) => {
         .then(function(response) {
             return response.json()
         }).then(function(json) {
-            console.log('parsed json', json);
             dispatch({
                 type: SEARCH_ISSUES_SUCCESS,
                 payload: {
