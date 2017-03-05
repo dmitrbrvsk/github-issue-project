@@ -9,7 +9,7 @@ export const routes = (
   <div>
     <Route path='/'>
       <IndexRoute component={App}/>
-      <Route path='/issues(/:id)' component={IssuesPage} />
+      <Route path=':user/:repo/issues/:id' component={IssuesPage} />
     </Route>
     <Route path='*' component={NotFound} />
   </div>

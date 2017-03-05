@@ -10,6 +10,7 @@ export default class Header extends Component {
                  <AppBar
                     title="Search Issues GitHub"
                     titleStyle={style}
+                    showMenuIconButton={false}
                 />
             
              </MuiThemeProvider>    
