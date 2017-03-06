@@ -13,11 +13,6 @@ import { routes } from './routes.jsx'
 const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store);
 
-store.subscribe(() => {
-  console.log(store.getState());
-});
-
-
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history} routes={routes} />

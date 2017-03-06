@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 
 export default class Header extends Component {
     render() {
-        const style = {textAlign: 'center'}
         return (
-             <MuiThemeProvider>
-                 <AppBar
-                    title="Search Issues GitHub"
-                    titleStyle={style}
-                    showMenuIconButton={false}
-                />
-            
-             </MuiThemeProvider>    
+            <div className='header'>
+                <MuiThemeProvider>
+                    <AppBar
+                        title={<Link to='/' className='header-link'>Search Issues GitHub</Link>}
+                        showMenuIconButton={false}
+                    />
+                </MuiThemeProvider>
+            </div>
         )
     }
 }

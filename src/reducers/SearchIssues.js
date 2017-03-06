@@ -2,7 +2,10 @@ import { SEARCH_ISSUES_REQUEST, SEARCH_ISSUES_SUCCESS, SEARCH_ISSUES_FAILED } fr
 
 const initialState = {
   loading: false,
-  search_results: []
+  search_results: [],
+  meta: {
+    total_count: 0
+  }
 };
 
 export default function SearchIssuesReducer (state = initialState, action) {
@@ -17,7 +20,10 @@ export default function SearchIssuesReducer (state = initialState, action) {
       case SEARCH_ISSUES_SUCCESS:
         return {
           loading: false,
-          search_results: action.payload.results
+          search_results: action.payload.results,
+          meta: {
+            total_count: action.payload.results.length
+          }
         }
 
       case SEARCH_ISSUES_FAILED:

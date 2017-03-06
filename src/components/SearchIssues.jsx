@@ -7,6 +7,7 @@ import TextField from 'material-ui/TextField';
 import { ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
+import ReactPaginate from 'react-paginate';
 
 import { debounce } from 'throttle-debounce';
 import { bindActionCreators } from 'redux';
@@ -14,10 +15,8 @@ import { connect } from 'react-redux';
 import * as SearchIssuesAction from '../actions/SearchIssues';
 
 import { getFullDate } from '../lib';
+import Loader from './Loader.jsx'
 
-const Loading = () => {
-    return <img className='loader' src='/images/rolling.gif' role="presentation" />
-}
 
 const IssueItem = (props) => {
 
@@ -41,43 +40,54 @@ const IssueItem = (props) => {
     )
 }
 
-export class SearchIssues extends Component {
+class SearchIssues extends Component {
     constructor(props) {
         super(props);
         this.state = { 
             searchData: {
                 searchUser: null, 
-                searchRepo: null 
-            }
+                searchRepo: null,
+            },
+            offset: 0,
+            perPage: 5
         };
-        this.handleSearch = this.handleSearch.bind(this);
-        this.handleValidateForm = this.handleValidateForm.bind(this);
     }
 
     search = debounce(600, (q) => {
         this.props.actions.search({q: q});
+        this.setState({pageCount: Math.ceil(5 / this.state.perPage)});
     })
 
-    handleSearch() {
+    handleSearch = () => {
         const user = this.userInput.input.value;
         const repo = this.repoInput.input.value;
 
-        this.setState({ searchData: 
-            {
+        this.setState({ 
+            searchData: {
                 searchUser: user,
-                searchRepo: repo 
+                searchRepo: repo,
             }
         });
 
         this.search({
             user: user,
-            repo: repo
+            repo: repo,
+            limit: this.state.perPage, 
+            offset: this.state.offset
         })
     }
 
-    handleValidateForm() {
+    handleValidateForm = () => {
         // return this.userInput.input.value.length > 0 && this.repoInput.input.value.length > 0
     }
+
+    handlePageClick = (data) => {
+        let selected = data.selected;
+        let offset = Math.ceil(selected * this.state.perPage);
+        this.setState({offset: offset}, () => {
+            this.handleSearch();
+        });
+    }; 
 
     render() {
         return (
@@ -112,16 +122,30 @@ export class SearchIssues extends Component {
                     {
                         this.props.issues.loading 
                         ? 
-                        <Loading />
+                        <Loader />
                         :
                         !this.props.issues.loading && this.props.issues.search_results.map((issue, indx) => {
                             return <IssueItem 
-                                key={indx} 
-                                issueData={issue} 
-                                searchData={this.state.searchData}
-                            />    
+                                     key={indx} 
+                                     issueData={issue} 
+                                     searchData={this.state.searchData}
+                                   />    
                         })
                     }
+                     <ReactPaginate previousLabel={"previous"}
+                       nextLabel={"next"}
+                       breakLabel={<a href="">...</a>}
+                       breakClassName={"break-me"}
+                       pageCount={this.state.pageCount}
+                       marginPagesDisplayed={2}
+                       pageRangeDisplayed={5}
+                       onPageChange={this.handlePageClick}
+                       containerClassName={"pagination"}
+                       subContainerClassName={"pages pagination"}
+                       activeClassName={"active"}
+                       pageClassName={"pagination-item"}
+                       pageLinkClassName={'pagination-item-link'} 
+                    />
                 </Paper>   
             </MuiThemeProvider>
         )

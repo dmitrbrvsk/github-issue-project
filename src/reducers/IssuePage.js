@@ -1,8 +1,8 @@
-import { LOAD_ISSUE_REQUEST, LOAD_ISSUE_SUCCESS, LOAD_ISSUE_FAILED, URL_API } from '../constants/constants'
+import { LOAD_ISSUE_REQUEST, LOAD_ISSUE_SUCCESS, LOAD_ISSUE_FAILED } from '../constants/constants'
 
 const initialState = {
   loading: false,
-  loaded_ussue: []
+  loaded_issue: []
 };
 
 export default function IssueReducer (state = initialState, action) {

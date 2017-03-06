@@ -5,6 +5,10 @@
   font-family: 'Roboto', sans-serif;
 }
 
+ul, li {
+  list-style: none;
+}
+
 a
   text-decoration: none;
   color: #586069;
@@ -12,6 +16,12 @@ a
   &:hover {
     color: #0366d6
   }
+.header
+  text-align: center;
+  .header-link {
+    color: #fff;
+  }
+
 
 .wrapper
   width: 800px;
@@ -20,3 +30,45 @@ a
 .loader
   display: block;
   margin: 0 auto;
+
+.pagination
+  .pagination-item,
+  .break-me,
+  .previous,
+  .next {
+    display: inline-block;
+  }
+
+  .pagination-item-link
+    &:hover {
+      color: #777;
+      background-color: #eee;
+    }
+
+  .pagination-item-link,
+  .previous,
+  .next,
+  .break-me  {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+  }
+
+  .previous {
+    margin-right 10px;
+  }
+
+  .next {
+    margin-left 10px;
+  }
+
+  .active
+    .pagination-item-link {
+      color: #fff;
+      cursor: default;
+      background-color: #337ab7;
+      border-color: #337ab7;
+    }
+  .disabled {
+    cursor: not-allowed;
+  }

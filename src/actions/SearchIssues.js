@@ -12,12 +12,15 @@ export let search = (payload) => {
       return dispatch({
         type: SEARCH_ISSUES_SUCCESS,
         payload: {
-          results: []
+          results: [],
+          meta: {
+            total_count: 0
+          }
         }
       })
     }
 
-    fetch(URL_API + '/repos/' + searchObject.user + '/' + searchObject.repo +'/issues')
+    fetch(URL_API + '/repos/' + searchObject.user + '/' + searchObject.repo + '/issues?page=' + searchObject.offset + '&per_page=' + searchObject.limit)
         .then(function(response) {
             return response.json()
         }).then(function(json) {
