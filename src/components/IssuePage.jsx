@@ -17,7 +17,6 @@ class Issue extends Component {
 
     return (
       <div className='issue-page'>
-        <Header />
         <div className='wrapper'>
           <MuiThemeProvider>
             <Paper>
@@ -53,6 +52,7 @@ class IssuesPage extends Component {
     render() {
       return (
         <div>
+          <Header />
           {
             this.props.issue.loading 
             ? 

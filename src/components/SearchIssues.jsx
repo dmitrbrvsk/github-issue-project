@@ -49,13 +49,14 @@ class SearchIssues extends Component {
                 searchRepo: null,
             },
             offset: 0,
-            perPage: 5
+            perPage: 5,
+            disibledSearchBtn: true
         };
     }
 
     search = debounce(600, (q) => {
         this.props.actions.search({q: q});
-        this.setState({pageCount: Math.ceil(5 / this.state.perPage)});
+        // this.setState({pageCount: Math.ceil(5 / this.state.perPage)});
     })
 
     handleSearch = () => {
@@ -78,15 +79,14 @@ class SearchIssues extends Component {
     }
 
     handleValidateForm = () => {
-        // return this.userInput.input.value.length > 0 && this.repoInput.input.value.length > 0
+        let disibledSearchBtn = !(this.userInput.input.value.length > 0 && this.repoInput.input.value.length > 0);
+        this.setState({ disibledSearchBtn: disibledSearchBtn });
     }
 
     handlePageClick = (data) => {
         let selected = data.selected;
         let offset = Math.ceil(selected * this.state.perPage);
-        this.setState({offset: offset}, () => {
-            this.handleSearch();
-        });
+        this.setState({ offset: offset }, () => this.handleSearch());
     }; 
 
     render() {
@@ -116,7 +116,7 @@ class SearchIssues extends Component {
                             primary={true}
                             fullWidth={true} 
                             onClick={this.handleSearch}
-                            disabled={false} 
+                            disabled={this.state.disibledSearchBtn} 
                         />
                     </form>
                     {
