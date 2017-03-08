@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router'
+import { Link } from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -15,29 +15,62 @@ import { connect } from 'react-redux';
 import * as SearchIssuesAction from '../actions/SearchIssues';
 
 import { getFullDate } from '../lib';
-import Loader from './Loader.jsx'
+import Loader from './Loader.jsx';
 
+class IssueItem extends Component {
+    render() {
+        const { title, user, number, created_at } = this.props.issueData;
+        const { searchUser, searchRepo } = this.props.searchData;
 
-const IssueItem = (props) => {
+        return (
+            <div>
+                <ListItem
+                    leftAvatar={<Avatar src={user.avatar_url} role="presentation"/>}
+                    primaryText={<Link to={'/' + searchUser + '/' + searchRepo +  '/issues/' + number}>{title}</Link>}
+                    secondaryText={
+                        <div className='issue-info'>
+                            <span>#{number} opened {getFullDate(created_at)}  by <Link to={user.html_url} target='_blank'>{user.login}</Link></span>
+                        </div>
+                    }
+                    secondaryTextLines={1}
+                />
+                <Divider inset={true} />       
+            </div>
+        )
+    }
+}
 
-    const { title, user, number, created_at } = props.issueData;
-    const { searchUser, searchRepo } = props.searchData;
+class IssueList extends Component {
+    render() {
+        const { issueList, searchData } = this.props;
 
-    return (
-        <div>
-            <ListItem
-                leftAvatar={<Avatar src={user.avatar_url} role="presentation"/>}
-                primaryText={<Link to={'/' + searchUser + '/' + searchRepo +  '/issues/' + number}>{title}</Link>}
-                secondaryText={
-                    <div className='issue-info'>
-                        <span>#{number} opened {getFullDate(created_at)}  by <Link to={user.html_url} target='_blank'>{user.login}</Link></span>
-                    </div>
-                }
-                secondaryTextLines={1}
-            />
-            <Divider inset={true} />       
-        </div>
-    )
+        return (
+            <div className='issue_list'>
+                {issueList.map((issue, indx) => {
+                    return <IssueItem
+                        key={indx} 
+                        issueData={issue} 
+                        searchData={searchData}
+                    />
+                })}
+                <ReactPaginate 
+                    previousLabel={"previous"}
+                    nextLabel={"next"}
+                    breakLabel={<a href="">...</a>}
+                    breakClassName={"break-me"}
+                    pageCount={10}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={this.handlePageClick}
+                    containerClassName={"pagination"}
+                    subContainerClassName={"pages pagination"}
+                    activeClassName={"active"}
+                    pageClassName={"pagination-item"}
+                    pageLinkClassName={'pagination-item-link'} 
+                />
+            </div>
+        )
+    }
 }
 
 class SearchIssues extends Component {
@@ -84,8 +117,8 @@ class SearchIssues extends Component {
     }
 
     handlePageClick = (data) => {
-        let selected = data.selected;
-        let offset = Math.ceil(selected * this.state.perPage);
+        const selected = data.selected;
+        const offset = Math.ceil(selected * this.state.perPage);
         this.setState({ offset: offset }, () => this.handleSearch());
     }; 
 
@@ -124,28 +157,9 @@ class SearchIssues extends Component {
                         ? 
                         <Loader />
                         :
-                        !this.props.issues.loading && this.props.issues.search_results.map((issue, indx) => {
-                            return <IssueItem 
-                                     key={indx} 
-                                     issueData={issue} 
-                                     searchData={this.state.searchData}
-                                   />    
-                        })
+                        !this.props.issues.loading && this.props.issues.search_results.length > 0 && 
+                            <IssueList issueList={this.props.issues.search_results} searchData={this.state.searchData} />
                     }
-                     <ReactPaginate previousLabel={"previous"}
-                       nextLabel={"next"}
-                       breakLabel={<a href="">...</a>}
-                       breakClassName={"break-me"}
-                       pageCount={this.state.pageCount}
-                       marginPagesDisplayed={2}
-                       pageRangeDisplayed={5}
-                       onPageChange={this.handlePageClick}
-                       containerClassName={"pagination"}
-                       subContainerClassName={"pages pagination"}
-                       activeClassName={"active"}
-                       pageClassName={"pagination-item"}
-                       pageLinkClassName={'pagination-item-link'} 
-                    />
                 </Paper>   
             </MuiThemeProvider>
         )
@@ -154,7 +168,7 @@ class SearchIssues extends Component {
 
 let mapStateToProps = (state) => {
   return {
-    issues: state.issues
+    issues: state.search_issues
   }
 }
 

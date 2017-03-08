@@ -14,6 +14,9 @@ import { getFullDate } from '../lib';
 class Issue extends Component {
   render() {
     const issue = this.props.issue;
+    const user = issue.user || {};
+    const userLogin = user.login;
+    const userAvatar = user.avatar_url;
 
     return (
       <div className='issue-page'>
@@ -23,8 +26,8 @@ class Issue extends Component {
               <Card>
                 <CardHeader
                   title={issue.title + ' #' + issue.number}
-                  subtitle={getFullDate(issue.created_at)}
-                  avatar={'*'}
+                  subtitle={userLogin + ' opened ' + getFullDate(issue.created_at)}
+                  avatar={userAvatar}
                 />
                 <CardText>
                   {issue.body}
@@ -39,7 +42,7 @@ class Issue extends Component {
 }
 
 class IssuesPage extends Component {
-    componentWillMount() {
+    componentDidMount() {
       const { id, user, repo } = this.props.params;
 
       this.props.actions.load_ussue({
@@ -51,7 +54,7 @@ class IssuesPage extends Component {
 
     render() {
       return (
-        <div>
+        <div className='main-container'>
           <Header />
           {
             this.props.issue.loading 
@@ -68,7 +71,7 @@ class IssuesPage extends Component {
 
 let mapStateToProps = (state) => {
   return {
-    issue: state.issue
+    issue: state.page_issue
   }
 }
 

@@ -6,6 +6,6 @@ import IssuePage from './IssuePage';
 
 export default combineReducers({
     routing: routerReducer,
-    issues: SearchIssues,
-    issue: IssuePage
+    search_issues: SearchIssues,
+    page_issue: IssuePage
 })
