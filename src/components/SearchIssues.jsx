@@ -7,6 +7,7 @@ import TextField from 'material-ui/TextField';
 import { ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
+import AutoComplete from 'material-ui/AutoComplete';
 import ReactPaginate from 'react-paginate';
 
 import { debounce } from 'throttle-debounce';
@@ -59,23 +60,33 @@ class IssueList extends Component {
 }
 
 class SearchIssues extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { 
-            searchData: {
-                searchUser: null, 
-                searchRepo: null,
-            },
-            offset: 0,
-            perPage: 5,
-            disibledSearchBtn: true
-        };
-    }
+
+    state = { 
+        searchData: {
+            searchUser: null, 
+            searchRepo: null,
+        },
+        offset: 0,
+        perPage: 5,
+        disibledSearchBtn: true,
+        dataSource: [],
+    };
 
     search = debounce(600, (q) => {
         this.props.actions.search({q: q});
         // this.setState({pageCount: Math.ceil(total_count / this.state.perPage)}); TODO HOW TO GET COUNT iSSUES API GITHUB
     })
+
+    handleUpdateInput = (value) => {
+        console.log('value', value);    
+        this.setState({
+            dataSource: [
+                value,
+                value + value,
+                value + value + value
+            ],
+        });
+  };
 
     handleSearch = () => {
         const user = this.userInput.input.value;
@@ -121,21 +132,12 @@ class SearchIssues extends Component {
             <MuiThemeProvider>
                 <Paper>
                     <form className='form-search'>
-                        <TextField 
-                            className='fs-input'
-                            onChange={this.handleValidateForm}
-                            ref={(input) => { this.userInput = input }}
-                            fullWidth={true}
+                        <AutoComplete
                             hintText="reactjs"
-                            floatingLabelText="Введите имя пользователя"  
-                        />
-                        <TextField 
-                            className='fs-input'
-                            onChange={this.handleValidateForm}
-                            ref={(input) => { this.repoInput = input }}
+                            dataSource={this.state.dataSource}
+                            onUpdateInput={this.handleUpdateInput}
+                            floatingLabelText="Введите имя пользователя"
                             fullWidth={true}
-                            hintText="redux"
-                            floatingLabelText='Введите название репозитория' 
                         />
                         <TextField
                             defaultValue="5"
