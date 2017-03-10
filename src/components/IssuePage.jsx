@@ -14,6 +14,7 @@ import { getFullDate } from '../lib';
 class Issue extends Component {
   render() {
     const issue = this.props.issue;
+    const issueStatus = issue.state;
     const user = issue.user || {};
     const userLogin = user.login;
     const userAvatar = user.avatar_url;
@@ -26,7 +27,7 @@ class Issue extends Component {
               <Card>
                 <CardHeader
                   title={issue.title + ' #' + issue.number}
-                  subtitle={userLogin + ' opened ' + getFullDate(issue.created_at)}
+                  subtitle={userLogin + ' opened ' + getFullDate(issue.created_at) + ' status: ' + issueStatus}
                   avatar={userAvatar}
                 />
                 <CardText>
@@ -56,14 +57,12 @@ class IssuesPage extends Component {
       return (
         <div className='main-container'>
           <Header />
-          {
-            this.props.issue.loading 
-            ? 
+          {this.props.issue.loading ? (
             <Loader />
-            :
+           ) : (
             !this.props.issue.loading && this.props.issue.loaded_issue && 
               <Issue issue={this.props.issue.loaded_issue }/>
-          }
+           )}
         </div>
       )
     }

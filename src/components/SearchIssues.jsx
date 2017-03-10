@@ -19,9 +19,8 @@ import Loader from './Loader.jsx';
 
 class IssueItem extends Component {
     render() {
-        const { title, user, number, created_at } = this.props.issueData;
+        const { title, user, number, created_at, state } = this.props.issueData;
         const { searchUser, searchRepo } = this.props.searchData;
-
         return (
             <div>
                 <ListItem
@@ -29,7 +28,9 @@ class IssueItem extends Component {
                     primaryText={<Link to={'/' + searchUser + '/' + searchRepo +  '/issues/' + number}>{title}</Link>}
                     secondaryText={
                         <div className='issue-info'>
-                            <span>#{number} opened {getFullDate(created_at)}  by <Link to={user.html_url} target='_blank'>{user.login}</Link></span>
+                            <span>
+                                #{number} opened {getFullDate(created_at)} by <Link to={user.html_url} target='_blank'>{user.login}</Link> status: {state}
+                            </span>
                         </div>
                     }
                     secondaryTextLines={1}
@@ -43,7 +44,6 @@ class IssueItem extends Component {
 class IssueList extends Component {
     render() {
         const { issueList, searchData } = this.props;
-
         return (
             <div className='issue_list'>
                 {issueList.map((issue, indx) => {
@@ -53,21 +53,6 @@ class IssueList extends Component {
                         searchData={searchData}
                     />
                 })}
-                <ReactPaginate 
-                    previousLabel={"previous"}
-                    nextLabel={"next"}
-                    breakLabel={<a href="">...</a>}
-                    breakClassName={"break-me"}
-                    pageCount={10}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={this.handlePageClick}
-                    containerClassName={"pagination"}
-                    subContainerClassName={"pages pagination"}
-                    activeClassName={"active"}
-                    pageClassName={"pagination-item"}
-                    pageLinkClassName={'pagination-item-link'} 
-                />
             </div>
         )
     }
@@ -89,7 +74,7 @@ class SearchIssues extends Component {
 
     search = debounce(600, (q) => {
         this.props.actions.search({q: q});
-        // this.setState({pageCount: Math.ceil(5 / this.state.perPage)});
+        // this.setState({pageCount: Math.ceil(total_count / this.state.perPage)}); TODO HOW TO GET COUNT iSSUES API GITHUB
     })
 
     handleSearch = () => {
@@ -102,7 +87,7 @@ class SearchIssues extends Component {
                 searchRepo: repo,
             }
         });
-
+        
         this.search({
             user: user,
             repo: repo,
@@ -120,9 +105,18 @@ class SearchIssues extends Component {
         const selected = data.selected;
         const offset = Math.ceil(selected * this.state.perPage);
         this.setState({ offset: offset }, () => this.handleSearch());
-    }; 
+    }
+
+    handleUpdateCountIssue = (e) => {
+        const countIssue = e.target.value;
+        this.setState({ perPage: countIssue }, () => {
+            if (!this.state.disibledSearchBtn) this.handleSearch()
+        });
+    }
 
     render() {
+        const isVisiblePagination = (!this.props.issues.loading && this.props.issues.search_results.length > 0) ? 'show-pagination' : '';
+        console.log(isVisiblePagination)
         return (
             <MuiThemeProvider>
                 <Paper>
@@ -143,6 +137,12 @@ class SearchIssues extends Component {
                             hintText="redux"
                             floatingLabelText='Введите название репозитория' 
                         />
+                        <TextField
+                            defaultValue="5"
+                            floatingLabelText="Количество элементов отображаемых на странице"
+                            fullWidth={true}
+                            onChange={this.handleUpdateCountIssue}
+                        />
                         <RaisedButton
                             className='fs-button' 
                             label='Поиск' 
@@ -152,14 +152,28 @@ class SearchIssues extends Component {
                             disabled={this.state.disibledSearchBtn} 
                         />
                     </form>
-                    {
-                        this.props.issues.loading 
-                        ? 
+                    {this.props.issues.loading ? ( 
                         <Loader />
-                        :
-                        !this.props.issues.loading && this.props.issues.search_results.length > 0 && 
-                            <IssueList issueList={this.props.issues.search_results} searchData={this.state.searchData} />
-                    }
+                    )   :   ( 
+                        !this.props.issues.loading && this.props.issues.search_results.length > 0 &&
+                            <IssueList issueList={this.props.issues.search_results} searchData={this.state.searchData} /> 
+                         
+                    )}
+                    <ReactPaginate 
+                        previousLabel={"previous"}
+                        nextLabel={"next"}
+                        breakLabel={<a href="">...</a>}
+                        breakClassName={"break-me"}
+                        pageCount={10}
+                        marginPagesDisplayed={2}
+                        pageRangeDisplayed={5}
+                        onPageChange={this.handlePageClick}
+                        containerClassName={"pagination " + isVisiblePagination}
+                        subContainerClassName={"pages pagination"}
+                        activeClassName={"active"}
+                        pageClassName={"pagination-item"}
+                        pageLinkClassName={'pagination-item-link'} 
+                    />
                 </Paper>   
             </MuiThemeProvider>
         )

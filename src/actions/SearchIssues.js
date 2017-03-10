@@ -20,7 +20,7 @@ export let search = (payload) => {
       })
     }
 
-    fetch(URL_API + '/repos/' + searchObject.user + '/' + searchObject.repo + '/issues?page=' + searchObject.offset + '&per_page=' + searchObject.limit)
+    fetch(URL_API + '/repos/' + searchObject.user + '/' + searchObject.repo + '/issues?state=all&page=' + searchObject.offset + '&per_page=' + searchObject.limit)
         .then(function(response) {
             return response.json()
         }).then(function(json) {
