@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TextField from 'material-ui/TextField';
@@ -14,6 +13,7 @@ import { debounce } from 'throttle-debounce';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as SearchIssuesAction from '../actions/SearchIssues';
+import * as SearchReposAction from '../actions/SearchRepos';
 
 import { getFullDate } from '../lib';
 import Loader from './Loader.jsx';
@@ -73,12 +73,18 @@ class SearchIssues extends Component {
     };
 
     search = debounce(600, (q) => {
-        this.props.actions.search({q: q});
+        this.props.actions.searchRepos({q: q});
         // this.setState({pageCount: Math.ceil(total_count / this.state.perPage)}); TODO HOW TO GET COUNT iSSUES API GITHUB
     })
 
-    handleUpdateInput = (value) => {
-        console.log('value', value);    
+    handleSearchRepos = (value) => {
+        console.log('value', value);
+        const user = value;
+
+        this.setState({ 
+            searchUser: user,
+        });  
+
         this.setState({
             dataSource: [
                 value,
@@ -86,7 +92,11 @@ class SearchIssues extends Component {
                 value + value + value
             ],
         });
-  };
+
+        this.search({
+            user: user
+        })
+    }
 
     handleSearch = () => {
         const user = this.userInput.input.value;
@@ -105,11 +115,6 @@ class SearchIssues extends Component {
             limit: this.state.perPage, 
             offset: this.state.offset
         })
-    }
-
-    handleValidateForm = () => {
-        let disibledSearchBtn = !(this.userInput.input.value.length > 0 && this.repoInput.input.value.length > 0);
-        this.setState({ disibledSearchBtn: disibledSearchBtn });
     }
 
     handlePageClick = (data) => {
@@ -135,7 +140,7 @@ class SearchIssues extends Component {
                         <AutoComplete
                             hintText="reactjs"
                             dataSource={this.state.dataSource}
-                            onUpdateInput={this.handleUpdateInput}
+                            onUpdateInput={this.handleSearchRepos}
                             floatingLabelText="Введите имя пользователя"
                             fullWidth={true}
                         />
@@ -144,14 +149,6 @@ class SearchIssues extends Component {
                             floatingLabelText="Количество элементов отображаемых на странице"
                             fullWidth={true}
                             onChange={this.handleUpdateCountIssue}
-                        />
-                        <RaisedButton
-                            className='fs-button' 
-                            label='Поиск' 
-                            primary={true}
-                            fullWidth={true} 
-                            onClick={this.handleSearch}
-                            disabled={this.state.disibledSearchBtn} 
                         />
                     </form>
                     {this.props.issues.loading ? ( 
@@ -184,14 +181,19 @@ class SearchIssues extends Component {
 
 let mapStateToProps = (state) => {
   return {
-    issues: state.search_issues
+    issues: state.search_issues,
+    repos: state.search_repos
   }
 }
 
 let mapDispatchToProps = (dispatch) => {
+  let actions = bindActionCreators(SearchIssuesAction, dispatch)
+  console.log(actions);
+
   return {
     actions: bindActionCreators(SearchIssuesAction, dispatch)
   }
 }
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchIssues)
