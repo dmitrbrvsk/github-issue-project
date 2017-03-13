@@ -6,7 +6,6 @@ import TextField from 'material-ui/TextField';
 import { ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
-import AutoComplete from 'material-ui/AutoComplete';
 import ReactPaginate from 'react-paginate';
 
 import { debounce } from 'throttle-debounce';
@@ -21,7 +20,7 @@ import Loader from './Loader.jsx';
 class IssueItem extends Component {
     render() {
         const { title, user, number, created_at, state } = this.props.issueData;
-        const { searchUser, searchRepo } = this.props.searchData;
+        const { searchUser, searchRepo } = this.props;
         return (
             <div>
                 <ListItem
@@ -44,14 +43,15 @@ class IssueItem extends Component {
 
 class IssueList extends Component {
     render() {
-        const { issueList, searchData } = this.props;
+        const { issueList, searchUser, searchRepo } = this.props;
         return (
             <div className='issue_list'>
                 {issueList.map((issue, indx) => {
                     return <IssueItem
                         key={indx} 
                         issueData={issue} 
-                        searchData={searchData}
+                        searchUser={searchUser}
+                        searchRepo={searchRepo}
                     />
                 })}
             </div>
@@ -59,68 +59,90 @@ class IssueList extends Component {
     }
 }
 
+class ListRepos extends Component {
+    handleClick = (repo) => {
+        this.props.handleSearchIssue(repo);
+    }
+
+    render() {
+        const repos = this.props.repos;
+        return (
+            <ul>
+                {
+                    repos.map((repo, indx) => {
+                        return <li key={indx} onClick={this.handleClick.bind(this, repo)}>{repo}</li>
+                    })
+                }
+            </ul>
+        )
+    }
+}
+
 class SearchIssues extends Component {
 
     state = { 
-        searchData: {
-            searchUser: null, 
-            searchRepo: null,
-        },
+        searchUser: null, 
+        searchRepo: null,
         offset: 0,
         perPage: 5,
-        disibledSearchBtn: true,
-        dataSource: [],
-    };
+        dataRepos: [],
+    }
 
-    search = debounce(600, (q) => {
+    componentWillReceiveProps(nextProps) {
+        const searchRepos = nextProps.repos.search_results;
+        if (searchRepos) {
+            const namesRepos = searchRepos.map(repo => repo.name);
+            this.setState({
+                dataRepos: namesRepos
+            });
+        } 
+    }
+
+    searchRepos = debounce(600, (q) => {
         this.props.actions.searchRepos({q: q});
+    })
+
+    searchIssues = debounce(600, (q) => {
+        this.props.actions.searchIssues({q: q});
         // this.setState({pageCount: Math.ceil(total_count / this.state.perPage)}); TODO HOW TO GET COUNT iSSUES API GITHUB
     })
 
-    handleSearchRepos = (value) => {
-        console.log('value', value);
-        const user = value;
-
+    handleSearchRepos = (e) => {
+        const user = e.target.value;
         this.setState({ 
-            searchUser: user,
+            searchUser: user
         });  
 
-        this.setState({
-            dataSource: [
-                value,
-                value + value,
-                value + value + value
-            ],
-        });
-
-        this.search({
-            user: user
-        })
+        this.searchRepos(user);
     }
 
-    handleSearch = () => {
-        const user = this.userInput.input.value;
-        const repo = this.repoInput.input.value;
+    handleSearchIssue = (repo) => {
+        if(repo) {
+            this.setState({ 
+                searchRepo: repo
+            });
+        }
+        const { searchUser, perPage, offset } =  this.state;
 
-        this.setState({ 
-            searchData: {
-                searchUser: user,
-                searchRepo: repo,
-            }
-        });
-        
-        this.search({
-            user: user,
-            repo: repo,
-            limit: this.state.perPage, 
-            offset: this.state.offset
-        })
+        console.log(repo)
+
+
+        //console.log(searchRepo)
+
+        this.searchIssues({
+            user: searchUser,
+            repo: repo || this.state.searchRepo,
+            limit: perPage, 
+            offset: offset
+        }) 
     }
 
     handlePageClick = (data) => {
         const selected = data.selected;
         const offset = Math.ceil(selected * this.state.perPage);
-        this.setState({ offset: offset }, () => this.handleSearch());
+        console.log(selected);
+        console.log(offset)
+        this.setState({ offset: offset }, () => this.handleSearchIssue());
     }
 
     handleUpdateCountIssue = (e) => {
@@ -132,15 +154,15 @@ class SearchIssues extends Component {
 
     render() {
         const isVisiblePagination = (!this.props.issues.loading && this.props.issues.search_results.length > 0) ? 'show-pagination' : '';
-        console.log(isVisiblePagination)
+        const repos  = this.state.dataRepos;
         return (
             <MuiThemeProvider>
                 <Paper>
                     <form className='form-search'>
-                        <AutoComplete
+                        <TextField
                             hintText="reactjs"
-                            dataSource={this.state.dataSource}
-                            onUpdateInput={this.handleSearchRepos}
+                            
+                            onChange={this.handleSearchRepos}
                             floatingLabelText="Введите имя пользователя"
                             fullWidth={true}
                         />
@@ -151,11 +173,17 @@ class SearchIssues extends Component {
                             onChange={this.handleUpdateCountIssue}
                         />
                     </form>
+                    {this.props.repos.loading ? <Loader /> : <ListRepos repos={repos} handleSearchIssue={this.handleSearchIssue}/>} 
+
                     {this.props.issues.loading ? ( 
                         <Loader />
                     )   :   ( 
                         !this.props.issues.loading && this.props.issues.search_results.length > 0 &&
-                            <IssueList issueList={this.props.issues.search_results} searchData={this.state.searchData} /> 
+                            <IssueList 
+                                issueList={this.props.issues.search_results} 
+                                searchUser={this.state.searchUser}
+                                searchRepo={this.state.searchRepo}  
+                            /> 
                          
                     )}
                     <ReactPaginate 
@@ -187,11 +215,8 @@ let mapStateToProps = (state) => {
 }
 
 let mapDispatchToProps = (dispatch) => {
-  let actions = bindActionCreators(SearchIssuesAction, dispatch)
-  console.log(actions);
-
   return {
-    actions: bindActionCreators(SearchIssuesAction, dispatch)
+    actions: bindActionCreators({...SearchIssuesAction, ...SearchReposAction}, dispatch)
   }
 }
 

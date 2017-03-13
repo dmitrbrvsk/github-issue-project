@@ -2,7 +2,7 @@ import { SEARCH_REPOS_REQUEST, SEARCH_REPOS_SUCCESS, SEARCH_REPOS_FAILED } from 
 
 const initialState = {
   loading: false,
-  search_repos_results: [],
+  search_results: [],
 };
 
 export default function SearchReposReducer (state = initialState, action) {
@@ -17,13 +17,13 @@ export default function SearchReposReducer (state = initialState, action) {
       case SEARCH_REPOS_SUCCESS:
         return {
           loading: false,
-          search_repos_results: action.payload.results,
+          search_results: action.payload.results,
         }
 
       case SEARCH_REPOS_FAILED:
         return {
           loading: false,
-          search_repos_results: []
+          search_results: []
         }
 
       default:

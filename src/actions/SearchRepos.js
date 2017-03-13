@@ -3,7 +3,6 @@ import { SEARCH_REPOS_REQUEST, SEARCH_REPOS_SUCCESS, SEARCH_REPOS_FAILED, URL_AP
 export let searchRepos = (payload) => {
   return (dispatch) => {
     const searchUser = payload.q;
-
     dispatch({
       type: SEARCH_REPOS_REQUEST
     })

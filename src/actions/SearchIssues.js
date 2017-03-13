@@ -1,9 +1,8 @@
 import { SEARCH_ISSUES_REQUEST, SEARCH_ISSUES_SUCCESS, SEARCH_ISSUES_FAILED, URL_API } from '../constants/constants'
 
-export let search = (payload) => {
+export let searchIssues = (payload) => {
   return (dispatch) => {
     const searchObject = payload.q;
-
     dispatch({
       type: SEARCH_ISSUES_REQUEST
     })
@@ -13,9 +12,6 @@ export let search = (payload) => {
         type: SEARCH_ISSUES_SUCCESS,
         payload: {
           results: [],
-          meta: {
-            total_count: 0
-          }
         }
       })
     }
