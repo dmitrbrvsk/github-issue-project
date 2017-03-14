@@ -1,4 +1,4 @@
-import { SEARCH_REPOS_REQUEST, SEARCH_REPOS_SUCCESS, SEARCH_REPOS_FAILED } from '../constants/constants';
+import { SEARCH_REPOS_REQUEST, SEARCH_REPOS_SUCCESS, SEARCH_REPOS_FAILED, RESET } from '../constants/constants';
 
 const initialState = {
   loading: false,
@@ -21,6 +21,12 @@ export default function SearchReposReducer (state = initialState, action) {
         }
 
       case SEARCH_REPOS_FAILED:
+        return {
+          loading: false,
+          search_results: []
+        }
+
+      case RESET:
         return {
           loading: false,
           search_results: []

@@ -1,4 +1,4 @@
-import { SEARCH_REPOS_REQUEST, SEARCH_REPOS_SUCCESS, SEARCH_REPOS_FAILED, URL_API } from '../constants/constants'
+import { SEARCH_REPOS_REQUEST, SEARCH_REPOS_SUCCESS, SEARCH_REPOS_FAILED, RESET, URL_API } from '../constants/constants'
 
 export let searchRepos = (payload) => {
   return (dispatch) => {
@@ -33,4 +33,12 @@ export let searchRepos = (payload) => {
             console.log('parsing failed', ex);
     })
   }
+}
+
+export let clearRepos = (payload) => {
+   return (dispatch) => {
+      dispatch({
+        type: RESET
+      })
+   }
 }

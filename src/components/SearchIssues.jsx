@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
 import Paper from 'material-ui/Paper';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TextField from 'material-ui/TextField';
-import { ListItem } from 'material-ui/List';
-import Divider from 'material-ui/Divider';
-import Avatar from 'material-ui/Avatar';
 import ReactPaginate from 'react-paginate';
 
 import { debounce } from 'throttle-debounce';
@@ -14,69 +10,9 @@ import { connect } from 'react-redux';
 import * as SearchIssuesAction from '../actions/SearchIssues';
 import * as SearchReposAction from '../actions/SearchRepos';
 
-import { getFullDate } from '../lib';
 import Loader from './Loader.jsx';
-
-class IssueItem extends Component {
-    render() {
-        const { title, user, number, created_at, state } = this.props.issueData;
-        const { searchUser, searchRepo } = this.props;
-        return (
-            <div>
-                <ListItem
-                    leftAvatar={<Avatar src={user.avatar_url} role="presentation"/>}
-                    primaryText={<Link to={'/' + searchUser + '/' + searchRepo +  '/issues/' + number}>{title}</Link>}
-                    secondaryText={
-                        <div className='issue-info'>
-                            <span>
-                                #{number} opened {getFullDate(created_at)} by <Link to={user.html_url} target='_blank'>{user.login}</Link> status: {state}
-                            </span>
-                        </div>
-                    }
-                    secondaryTextLines={1}
-                />
-                <Divider inset={true} />       
-            </div>
-        )
-    }
-}
-
-class IssueList extends Component {
-    render() {
-        const { issueList, searchUser, searchRepo } = this.props;
-        return (
-            <div className='issue_list'>
-                {issueList.map((issue, indx) => {
-                    return <IssueItem
-                        key={indx} 
-                        issueData={issue} 
-                        searchUser={searchUser}
-                        searchRepo={searchRepo}
-                    />
-                })}
-            </div>
-        )
-    }
-}
-
-class ListRepos extends Component {
-    handleClick = (repo) => {
-        this.props.handleSearchIssue(repo);
-    }
-
-    render() {
-        const repos = this.props.repos;
-        return (
-            <ul>
-                {
-                    repos.map((repo, indx) => {
-                        return <li key={indx} onClick={this.handleClick.bind(this, repo)}>{repo}</li>
-                    })
-                }
-            </ul>
-        )
-    }
-}
+import IssueList from './IssueList.jsx';
+import ReposList from './ReposList.jsx';
 
 class SearchIssues extends Component {
 
@@ -86,6 +22,10 @@ class SearchIssues extends Component {
         offset: 0,
         perPage: 5,
         dataRepos: [],
+    }
+
+    componentWillMount() {
+        this.props.actions.clearIssues() && this.props.actions.clearRepos();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -117,21 +57,18 @@ class SearchIssues extends Component {
     }
 
     handleSearchIssue = (repo) => {
-        if(repo) {
+        const newRepoSearchIssue = repo;
+        const { searchUser, perPage, offset } =  this.state;
+        
+        if(newRepoSearchIssue) {
             this.setState({ 
-                searchRepo: repo
+                searchRepo: newRepoSearchIssue
             });
         }
-        const { searchUser, perPage, offset } =  this.state;
-
-        console.log(repo)
-
-
-        //console.log(searchRepo)
 
         this.searchIssues({
+            repo: newRepoSearchIssue || this.state.searchRepo,
             user: searchUser,
-            repo: repo || this.state.searchRepo,
             limit: perPage, 
             offset: offset
         }) 
@@ -140,15 +77,15 @@ class SearchIssues extends Component {
     handlePageClick = (data) => {
         const selected = data.selected;
         const offset = Math.ceil(selected * this.state.perPage);
-        console.log(selected);
-        console.log(offset)
         this.setState({ offset: offset }, () => this.handleSearchIssue());
     }
 
     handleUpdateCountIssue = (e) => {
-        const countIssue = e.target.value;
+        const countIssue = e.target.value.replace(/[^\d]/g, '');
+        e.target.value = countIssue;
+
         this.setState({ perPage: countIssue }, () => {
-            if (!this.state.disibledSearchBtn) this.handleSearch()
+            this.handleSearchIssue();
         });
     }
 
@@ -161,7 +98,6 @@ class SearchIssues extends Component {
                     <form className='form-search'>
                         <TextField
                             hintText="reactjs"
-                            
                             onChange={this.handleSearchRepos}
                             floatingLabelText="Введите имя пользователя"
                             fullWidth={true}
@@ -173,7 +109,7 @@ class SearchIssues extends Component {
                             onChange={this.handleUpdateCountIssue}
                         />
                     </form>
-                    {this.props.repos.loading ? <Loader /> : <ListRepos repos={repos} handleSearchIssue={this.handleSearchIssue}/>} 
+                    {this.props.repos.loading ? <Loader /> : <ReposList repos={repos} handleSearchIssue={this.handleSearchIssue}/>} 
 
                     {this.props.issues.loading ? ( 
                         <Loader />
