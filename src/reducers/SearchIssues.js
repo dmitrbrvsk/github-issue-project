@@ -1,4 +1,4 @@
-import { SEARCH_ISSUES_REQUEST, SEARCH_ISSUES_SUCCESS, SEARCH_ISSUES_FAILED } from '../constants/constants';
+import { SEARCH_ISSUES_REQUEST, SEARCH_ISSUES_SUCCESS, SEARCH_ISSUES_FAILED, RESET } from '../constants/constants';
 
 const initialState = {
   loading: false,
@@ -27,6 +27,12 @@ export default function SearchIssuesReducer (state = initialState, action) {
         }
 
       case SEARCH_ISSUES_FAILED:
+        return {
+          loading: false,
+          search_results: []
+        }
+
+      case RESET:
         return {
           loading: false,
           search_results: []

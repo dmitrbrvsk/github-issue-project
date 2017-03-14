@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TextField from 'material-ui/TextField';
-import { ListItem } from 'material-ui/List';
-import Divider from 'material-ui/Divider';
-import Avatar from 'material-ui/Avatar';
 import ReactPaginate from 'react-paginate';
 
 import { debounce } from 'throttle-debounce';
@@ -14,62 +10,25 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as SearchIssuesAction from '../actions/SearchIssues';
 
-import { getFullDate } from '../lib';
+import IssueList from './IssueList.jsx';
 import Loader from './Loader.jsx';
 
-class IssueItem extends Component {
-    render() {
-        const { title, user, number, created_at, state } = this.props.issueData;
-        const { searchUser, searchRepo } = this.props.searchData;
-        return (
-            <div>
-                <ListItem
-                    leftAvatar={<Avatar src={user.avatar_url} role="presentation"/>}
-                    primaryText={<Link to={'/' + searchUser + '/' + searchRepo +  '/issues/' + number}>{title}</Link>}
-                    secondaryText={
-                        <div className='issue-info'>
-                            <span>
-                                #{number} opened {getFullDate(created_at)} by <Link to={user.html_url} target='_blank'>{user.login}</Link> status: {state}
-                            </span>
-                        </div>
-                    }
-                    secondaryTextLines={1}
-                />
-                <Divider inset={true} />       
-            </div>
-        )
-    }
-}
 
-class IssueList extends Component {
-    render() {
-        const { issueList, searchData } = this.props;
-        return (
-            <div className='issue_list'>
-                {issueList.map((issue, indx) => {
-                    return <IssueItem
-                        key={indx} 
-                        issueData={issue} 
-                        searchData={searchData}
-                    />
-                })}
-            </div>
-        )
-    }
-}
 
 class SearchIssues extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { 
-            searchData: {
-                searchUser: null, 
-                searchRepo: null,
-            },
-            offset: 0,
-            perPage: 5,
-            disibledSearchBtn: true
-        };
+    
+    state = { 
+        searchData: {
+            searchUser: null, 
+            searchRepo: null,
+        },
+        offset: 0,
+        perPage: 5,
+        disibledSearchBtn: true
+    }
+
+    componentWillMount() {
+        this.props.actions.clearIssues();
     }
 
     search = debounce(600, (q) => {
@@ -116,7 +75,7 @@ class SearchIssues extends Component {
 
     render() {
         const isVisiblePagination = (!this.props.issues.loading && this.props.issues.search_results.length > 0) ? 'show-pagination' : '';
-        console.log(isVisiblePagination)
+
         return (
             <MuiThemeProvider>
                 <Paper>

@@ -43,7 +43,7 @@ class Issue extends Component {
 }
 
 class IssuesPage extends Component {
-    componentDidMount() {
+    componentWillMount() {
       const { id, user, repo } = this.props.params;
 
       this.props.actions.load_ussue({
