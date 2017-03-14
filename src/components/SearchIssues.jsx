@@ -48,7 +48,9 @@ class SearchIssues extends Component {
     })
 
     handleSearchRepos = (e) => {
-        const user = e.target.value;
+        const user = e.target.value.replace(/[^\d\w_]/g, '');
+        e.target.value = user;
+
         this.setState({ 
             searchUser: user
         });  

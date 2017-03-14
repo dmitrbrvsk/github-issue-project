@@ -15,7 +15,7 @@ export let searchIssues = (payload) => {
         }
       })
     }
-
+    
     fetch(URL_API + '/repos/' + searchObject.user + '/' + searchObject.repo + '/issues?state=all&page=' + searchObject.offset + '&per_page=' + searchObject.limit + '&access_token=153cffde38f6085cd0fca9e0cb31232b45bbad0c')
         .then(function(response) {
             return response.json()
