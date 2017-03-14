@@ -6,7 +6,7 @@ export let load_ussue = (payload) => {
       type: LOAD_ISSUE_REQUEST
     })
 
-    fetch(URL_API + '/repos/' + payload.user + '/' + payload.repo + '/issues/' + payload.id)
+    fetch(URL_API + '/repos/' + payload.user + '/' + payload.repo + '/issues/' + payload.id + '?access_token=153cffde38f6085cd0fca9e0cb31232b45bbad0c')
         .then(function(response) {
             return response.json()
         }).then(function(json) {

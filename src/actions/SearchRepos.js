@@ -16,7 +16,7 @@ export let searchRepos = (payload) => {
       })
     }
 
-    fetch(URL_API + '/users/' + searchUser + '/repos')
+    fetch(URL_API + '/users/' + searchUser + '/repos?access_token=153cffde38f6085cd0fca9e0cb31232b45bbad0c')
         .then(function(response) {
             return response.json()
         }).then(function(json) {
