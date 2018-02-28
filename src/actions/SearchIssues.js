@@ -1,3 +1,4 @@
+import parse from 'parse-link-header'
 import { SEARCH_ISSUES_REQUEST, SEARCH_ISSUES_SUCCESS, SEARCH_ISSUES_FAILED, RESET, URL_API } from '../constants/constants'
 
 export let search = (payload) => {
@@ -22,7 +23,8 @@ export let search = (payload) => {
 
     fetch(URL_API + '/repos/' + searchObject.user + '/' + searchObject.repo + '/issues?state=all&page=' + searchObject.offset + '&per_page=' + searchObject.limit)
         .then(function(response) {
-            return response.json()
+          console.log(parse(response.headers.get('Link')));
+          return response.json()
         }).then(function(json) {
             dispatch({
                 type: SEARCH_ISSUES_SUCCESS,
