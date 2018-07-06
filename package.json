@@ -53,14 +53,16 @@
     "whatwg-fetch": "2.0.2"
   },
   "dependencies": {
+    "history": "^4.7.2",
     "material-ui": "^0.17.0",
     "parse-link-header": "^1.0.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-paginate": "^4.1.1",
     "react-redux": "^5.0.3",
-    "react-router": "^3.0.2",
-    "react-router-redux": "^4.0.8",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^5.0.0-alpha.9",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
     "redux-devtools-extension": "^2.13.0",
@@ -76,7 +78,10 @@
     "lint-fixup": "./node_modules/.bin/eslint src --ext .js,.jsx --fix",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
   },
-  "pre-commit": [ "precommit-msg", "lint" ],
+  "pre-commit": [
+    "precommit-msg",
+    "lint"
+  ],
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"
