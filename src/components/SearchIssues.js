@@ -24,7 +24,7 @@ class SearchIssues extends Component {
 		disibledSearchBtn: true
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		this.props.actions.clearIssues()
 	}
 

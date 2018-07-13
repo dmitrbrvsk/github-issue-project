@@ -11,7 +11,7 @@ const AppRouter = ({ history }) => (
 	<ConnectedRouter history={ history }>
 		<Switch>
 			<Route exact path='/' component={ App } />
-			<Route path={ ':user/:repo/issues/:id' } component={ IssuePage } />
+			<Route path='/:user/:repo/issues/:id' component={ IssuePage } />
 			<Route component={ NotFound } />
 		</Switch>
 	</ConnectedRouter>

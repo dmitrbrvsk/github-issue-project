@@ -9,8 +9,8 @@ import Issue from './Issue'
 import Loader from './Loader'
 
 class IssuesPage extends Component {
-	componentWillMount() {
-		const { id, user, repo } = this.props.params
+	componentDidMount() {
+		const { id, user, repo } = this.props.match.params
 
 		this.props.actions.loadIssue({
 			id,
