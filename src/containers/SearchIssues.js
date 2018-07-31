@@ -10,8 +10,8 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as SearchIssuesAction from '../actions/SearchIssues'
 
-import IssueList from './IssueList'
-import Loader from './Loader'
+import IssueList from '../components/IssueList'
+import Loader from '../components/Loader'
 
 class SearchIssues extends Component {
 	state = {

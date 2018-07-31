@@ -1,5 +1,5 @@
 import React from 'react'
-import SearchIssues from '../components/SearchIssues'
+import SearchIssues from './SearchIssues'
 import Header from '../components/Header'
 
 import '../styles/common.styl'

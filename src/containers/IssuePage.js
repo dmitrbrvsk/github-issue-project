@@ -4,9 +4,9 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as contentActions from '../actions/IssuePage'
 
-import Header from './Header'
-import Issue from './Issue'
-import Loader from './Loader'
+import Header from '../components/Header'
+import Issue from '../components/Issue'
+import Loader from '../components/Loader'
 
 class IssuesPage extends Component {
 	componentDidMount() {

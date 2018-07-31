@@ -4,7 +4,7 @@ import { Switch } from 'react-router-dom'
 import { ConnectedRouter } from 'react-router-redux'
 
 import App from './containers/App'
-import IssuePage from './components/IssuePage'
+import IssuePage from './containers/IssuePage'
 import NotFound from './components/NotFound'
 
 const AppRouter = ({ history }) => (
