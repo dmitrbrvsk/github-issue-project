@@ -2,7 +2,7 @@ import {
 	LOAD_ISSUE_REQUEST,
 	LOAD_ISSUE_SUCCESS,
 	LOAD_ISSUE_FAILED
-} from '../constants/constants'
+} from '../constants'
 
 const initialState = {
 	loading: false,

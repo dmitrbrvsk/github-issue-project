@@ -8,10 +8,10 @@ import ReactPaginate from 'react-paginate'
 import { debounce } from 'throttle-debounce'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as SearchIssuesAction from '../actions/SearchIssues'
+import * as SearchIssuesAction from '../../actions/SearchIssues'
 
-import IssueList from '../components/IssueList'
-import Loader from '../components/Loader'
+import IssueList from '../../components/IssueList'
+import Loader from '../../components/Loader'
 
 class SearchIssues extends Component {
 	state = {

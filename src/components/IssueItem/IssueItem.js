@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { ListItem } from 'material-ui/List'
 import Divider from 'material-ui/Divider'
 import Avatar from 'material-ui/Avatar'
-import { getFullDate } from '../lib'
+import { getFullDate } from '../../utils'
 
 const IssueItem = ({ issueData, searchData }) => {
 	const { title, user, number, state } = issueData

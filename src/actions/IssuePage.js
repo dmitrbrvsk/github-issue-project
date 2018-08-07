@@ -3,7 +3,7 @@ import {
 	LOAD_ISSUE_SUCCESS,
 	LOAD_ISSUE_FAILED,
 	URL_API
-} from '../constants/constants'
+} from '../constants'
 
 export const loadIssue = payload => {
 	return dispatch => {

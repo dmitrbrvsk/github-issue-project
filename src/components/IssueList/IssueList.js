@@ -1,5 +1,5 @@
 import React from 'react'
-import IssueItem from './IssueItem'
+import IssueItem from '../IssueItem'
 
 const IssueList = ({ issueList, searchData }) => (
 	<div className='issue_list'>

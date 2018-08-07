@@ -1,8 +1,8 @@
 import React from 'react'
-import SearchIssues from './SearchIssues'
-import Header from '../components/Header'
+import SearchIssues from '../SearchIssues'
+import Header from '../../components/Header'
 
-import '../styles/common.styl'
+import '../../styles/common.styl'
 
 const App = () => (
 	<div className='App'>

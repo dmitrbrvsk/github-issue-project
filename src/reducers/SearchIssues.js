@@ -2,7 +2,7 @@ import {
 	SEARCH_ISSUES_REQUEST,
 	SEARCH_ISSUES_SUCCESS,
 	SEARCH_ISSUES_FAILED, RESET
-} from '../constants/constants'
+} from '../constants'
 
 
 const initialState = {

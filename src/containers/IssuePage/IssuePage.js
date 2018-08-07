@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as contentActions from '../actions/IssuePage'
+import * as contentActions from '../../actions/IssuePage'
 
-import Header from '../components/Header'
-import Issue from '../components/Issue'
-import Loader from '../components/Loader'
+import Header from '../../components/Header'
+import Issue from '../../components/Issue'
+import Loader from '../../components/Loader'
 
 class IssuesPage extends Component {
 	componentDidMount() {

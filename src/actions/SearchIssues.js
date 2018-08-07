@@ -5,7 +5,7 @@ import {
 	SEARCH_ISSUES_FAILED,
 	RESET,
 	URL_API
-} from '../constants/constants'
+} from '../constants'
 
 export const search = payload => {
 	return dispatch => {
