@@ -1,1 +1,2 @@
-export { default as getFullDate } from './getFullDate'
+import getFullDate from './getFullDate'
+
