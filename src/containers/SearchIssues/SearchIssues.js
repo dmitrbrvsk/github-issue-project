@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
 import Paper from 'material-ui/Paper'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import TextField from 'material-ui/TextField'
@@ -101,14 +101,14 @@ class SearchIssues extends Component {
 							fullWidth
 							onChange={ this.handleUpdateCountIssue }
 						/>
-						<RaisedButton
-							className='fs-button'
-							label='Поиск'
-							primary
+						<Button
+							variant='contained'
 							fullWidth
 							onClick={ this.handleSearch }
 							disabled={ this.state.disibledSearchBtn }
-						/>
+						>
+							Поиск
+						</Button>
 					</form>
 					{issues.loading ? (
 						<Loader />
