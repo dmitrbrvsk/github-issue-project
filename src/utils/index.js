@@ -1,2 +1,0 @@
-import getFullDate from './getFullDate'
-

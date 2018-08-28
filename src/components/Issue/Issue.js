@@ -3,7 +3,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Paper from 'material-ui/Paper'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 
-import { getFullDate } from '../../utils'
+import getFullDate from '../../utils/getFullDate'
 
 const Issue = ({ issue }) => {
 	const issueStatus = issue.state

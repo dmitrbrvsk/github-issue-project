@@ -2,7 +2,7 @@ import React from 'react'
 import SearchIssues from '../SearchIssues'
 import Header from '../../components/Header'
 
-import '../../styles/common.styl'
+import '../../styles/common.scss'
 
 const App = () => (
 	<div className='App'>
