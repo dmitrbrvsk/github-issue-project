@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Button from '@material-ui/core/Button'
 import Paper from 'material-ui/Paper'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import TextField from 'material-ui/TextField'
+import TextField from '@material-ui/core/TextField'
 import ReactPaginate from 'react-paginate'
 
 import { debounce } from 'throttle-debounce'
@@ -15,13 +15,11 @@ import Loader from '../../components/Loader'
 
 class SearchIssues extends Component {
 	state = {
-		searchData: {
-			searchUser: null,
-			searchRepo: null
-		},
+		user: '',
+		repo: '',
 		offset: 0,
 		perPage: 5,
-		disibledSearchBtn: true
+		isDisibleSearchButton: true
 	}
 
 	componentDidMount() {
@@ -35,14 +33,11 @@ class SearchIssues extends Component {
 	})
 
 	handleSearch = () => {
-		const user = this.userInput.input.value
-		const repo = this.repoInput.input.value
+		const { user, repo } = this.state
 
 		this.setState({
-			searchData: {
-				searchUser: user,
-				searchRepo: repo
-			}
+			user,
+			repo
 		})
 
 		this.search({
@@ -53,9 +48,17 @@ class SearchIssues extends Component {
 		})
 	}
 
-	handleValidateForm = () => {
-		const disibledSearchBtn = !(this.userInput.input.value.length > 0 && this.repoInput.input.value.length > 0)
-		this.setState({ disibledSearchBtn })
+	checkDisibleSearchButton = () => {
+		const { user, repo } = this.state
+		const isDisibleSearchButton = !(user.length > 0 && repo.length > 0)
+		this.setState({ isDisibleSearchButton })
+	}
+
+	handleChangeInput = event => {
+		const { name, value } = event.target
+		this.setState({ [name]: value }, () => {
+			this.checkDisibleSearchButton()
+		})
 	}
 
 	handlePageClick = data => {
@@ -67,11 +70,13 @@ class SearchIssues extends Component {
 	handleUpdateCountIssue = e => {
 		const countIssue = e.target.value
 		this.setState({ perPage: countIssue }, () => {
-			if (!this.state.disibledSearchBtn) this.handleSearch()
+			if (!this.state.isDisibleSearchButton) this.handleSearch()
 		})
 	}
 
 	render() {
+		const { user, repo } = this.state
+		const searchData = { userSearch: user, repoSearch: repo }
 		const { issues } = this.props
 		const isVisiblePagination = (!issues.loading && issues.search_results.length > 0) ? 'show-pagination' : ''
 
@@ -80,32 +85,35 @@ class SearchIssues extends Component {
 				<Paper>
 					<form className='form-search'>
 						<TextField
+							name='user'
 							className='fs-input'
-							onChange={ this.handleValidateForm }
-							ref={ input => { this.userInput = input } }
+							onChange={ this.handleChangeInput }
 							fullWidth
-							hintText='reactjs'
-							floatingLabelText='Введите имя пользователя'
+							placeholder='reactjs'
+							label='Введите имя пользователя'
+							margin='normal'
 						/>
 						<TextField
+							name='repo'
 							className='fs-input'
-							onChange={ this.handleValidateForm }
-							ref={ input => { this.repoInput = input } }
+							onChange={ this.handleChangeInput }
 							fullWidth
-							hintText='redux'
-							floatingLabelText='Введите название репозитория'
+							placeholder='redux'
+							label='Введите название репозитория'
+							margin='normal'
 						/>
 						<TextField
 							defaultValue='5'
-							floatingLabelText='Количество элементов отображаемых на странице'
+							label='Количество элементов отображаемых на странице'
 							fullWidth
 							onChange={ this.handleUpdateCountIssue }
+							margin='normal'
 						/>
 						<Button
 							variant='contained'
 							fullWidth
 							onClick={ this.handleSearch }
-							disabled={ this.state.disibledSearchBtn }
+							disabled={ this.state.isDisibleSearchButton }
 						>
 							Поиск
 						</Button>
@@ -113,10 +121,10 @@ class SearchIssues extends Component {
 					{issues.loading ? (
 						<Loader />
 					) : (
-						!issues.loading && issues.search_results.length > 0 &&
+						issues.search_results.length > 0 &&
 							<IssueList
 								issueList={ issues.search_results }
-								searchData={ this.state.searchData }
+								searchData={ searchData }
 							/>
 					)}
 					<ReactPaginate

@@ -8,12 +8,12 @@ import getFullDate from '../../utils/getFullDate'
 const IssueItem = ({ issueData, searchData }) => {
 	const { title, user, number, state } = issueData
 	const createdAt = issueData.created_at
-	const { searchUser, searchRepo } = searchData
+	const { userSearch, repoSearch } = searchData
 	return (
 		<div>
 			<ListItem
 				leftAvatar={ <Avatar src={ user.avatar_url } role='presentation' /> }
-				primaryText={ <Link to={ `/${searchUser}/${searchRepo}/issues/${number}` }>{ title }</Link> }
+				primaryText={ <Link to={ `/${userSearch}/${repoSearch}/issues/${number}` }>{ title }</Link> }
 				secondaryText={
 					<div className='issue-info'>
 						<span>
