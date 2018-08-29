@@ -18,7 +18,7 @@ branches:
 deploy:
   provider: heroku
   api_key:
-    secure: HEROKU_API_KEY
+    secure: 'a78d7ee4-2690-43f8-a296-0749fd8c7212'
   app: pet-project-github
   on:
     repo: dmitrbrvsk/github-project
