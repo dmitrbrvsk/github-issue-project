@@ -1,3 +1,11 @@
+[![Travis][build-badge]][build]
+[![Coveralls][coveralls-badge]][coveralls]
+
+[build-badge]: https://img.shields.io/travis/dmitrbrvsk/github-project/master.png?style=flat-square
+[build]: https://travis-ci.org/dmitrbrvsk/github-project
+
+[coveralls-badge]: https://img.shields.io/coveralls/dmitrbrvsk/github-project/master.png?style=flat-square
+[coveralls]: https://coveralls.io/github/dmitrbrvsk/github-project
 # Simple ReactGithub
 
 Created with [Create React App](https://github.com/facebookincubator/create-react-app)
