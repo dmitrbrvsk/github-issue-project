@@ -24,7 +24,7 @@ module.exports = {
     'indent': ['error', 'tab', { 'SwitchCase': 1 }],
     'semi': ['error', 'never'],
     'max-len': ['error', { 'code': 120, 'ignoreUrls': true }],
-    'no-console': ['warn'],
+    'no-console': 0,
     'no-unused-vars': ['warn'],
     'consistent-return': 0,
     'comma-dangle': ['error', 'never'],
