@@ -2,6 +2,7 @@ import React from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Paper from 'material-ui/Paper'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
+import ReactMarkdown from 'react-markdown'
 
 import getFullDate from '../../utils/getFullDate'
 
@@ -24,7 +25,11 @@ const Issue = ({ issue }) => {
 								avatar={ userAvatar }
 							/>
 							<CardText>
-								{ issue.body }
+								<ReactMarkdown
+									source={ issue.body }
+									className='markdown'
+								/>
+								{/* { issue.body } */}
 							</CardText>
 						</Card>
 					</Paper>
